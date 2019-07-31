@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="utf=8">
+  <meta name="viewport" content="width-device-widthl">
+  <head>
+      <title></title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="css/style.css" rel="stylesheet">
+      <script type="text/javascript" src="./d3/d3.min.js"></script>
+      <script  src="https://d3js.org/d3.v4.0.0.-alpha.49.min.js"></script>
+      <script  src="https://d3js.org/d3-selection-multi.v0.3.min.js"></script>
+  </head>
+  <body>
+    <script>
+      let h = 300;
+      let w = 900;
+
+      let buildLine = (ds) => {
+        let lineFun = d3.line()
+                        .x(d => (d.month = 20130001) / 2)
+                        .y(d => (h - (d.sales * 2 ))
+                        .curve(d3.curveLienar);
+      let svg = d3.select('body').append('svg').attrs({ width: w, height: h})
+
+      let viz = svg.append('path')
+                   .attrs({
+                     d: lineFun(ds.monthlySales),
+                     'stroke': 'orange',
+                     'stroke-width': '2',
+                     'fill': 'none',
+                   });
+
+      }
+
+      let showHeader = (ds) => d3.select('body').append('h1')
+                                 .text(ds.category + ' Sales(2013)');
+
+      d3.csv('test.csv', (error, data) => {
+        if(error) {
+          console.log('error', error)
+        } else {
+          console.log('Data', data);
+          ds = data;
+        }
+        data.contents.forEach(ds => {
+          console.log('ds', ds);
+          showHeader(ds);
+          buildLine(ds);
+        })
+      })                                 
+    </script>    
+  </body>
+</html>
